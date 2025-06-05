@@ -1,1 +1,4 @@
 Broadway Bot.code-workspace
+.env
+__pycache__/
+*pyc

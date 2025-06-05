@@ -5,14 +5,12 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import time
-
+import os
 import undetected_chromedriver as uc
 
-chrome_options = Options()
-service = Service(
-    "C:\\Users\\matth\\Downloads\\chromedriver-win32\\chromedriver-win32\\chromedriver.exe")
-driver = uc.Chrome(service=service, options=chrome_options)
-driver.maximize_window()
+from dotenv import load_dotenv
+load_dotenv()
+CHROMEDRIVER_PATH = os.getenv('CHROMEDRIVER_PATH')
 
 
 def broadway_direct(driver, show: str, n_t: int = 2, popup=False):
@@ -102,21 +100,28 @@ shows = {
     'broadway_direct': shows_bway_direct
 }
 
-for platform, show_list in shows.items():
-    print('Going through shows from', platform)
-    if platform == 'broadway_direct':
-        popup = True
-        for show, n_t in show_list.items():
-            print('Opening tab for', show)
-            try:
-                broadway_direct(driver, show, n_t=n_t, popup=popup)
-            except Exception as e:
-                print(f'Failed to get {show}, error: ', e)
-            popup = False
-            print('Completed form for', show)
-        time.sleep(.5)
 
-# broadway_direct(driver, 'the-lion-king', n_t = 2, popup=True)
+def start_lottery(platforms: dict):
 
-driver.quit()
-print('Session closed.')
+    chrome_options = Options()
+    service = Service(
+        CHROMEDRIVER_PATH)
+    driver = uc.Chrome(service=service, options=chrome_options)
+    driver.maximize_window()
+
+    print('Starting lottery...')
+    for platform, show_list in platforms.items():
+        print('Going through shows from', platform)
+        if platform == 'broadway_direct':
+            popup = True
+            for show, n_t in show_list.items():
+                print('Opening tab for', show)
+                try:
+                    broadway_direct(driver, show, n_t=n_t, popup=popup)
+                except Exception as e:
+                    print(f'Failed to get {show}, error: ', e)
+                popup = False
+                print('Completed form for', show)
+            time.sleep(.5)
+    driver.quit()
+    print('Lottery completed!')
