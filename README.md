@@ -20,18 +20,30 @@ The bot launches Chrome, navigates to each show's lottery page and fills in the 
 pip install -r requirements.txt
 ```
 
-3. Create a `.env` file in the project root with the following variable:
+3. Create a `.env` file in the project root with the following variables:
 
 ```
 CHROMEDRIVER_PATH=/path/to/chromedriver
+# Name of the conda environment to use
+CONDA_ENV=lottery
 ```
 
 ## Usage
 
-Simply run:
+### Linux/macOS
+
+Run the helper script:
 
 ```bash
-python main.py
+./run.sh
+```
+
+### Windows
+
+Use the batch script:
+
+```cmd
+run.bat
 ```
 
 The script will open a Chrome window and submit entries for each show listed in `shows_bway_direct` in `broadway_bot.py`.
